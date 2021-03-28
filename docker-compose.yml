@@ -1,7 +1,9 @@
 version: '3.9'
 services:
 
-        
+  # docker-compose build
+  # docker-compose run app sh -c "django-admin startproject app ."
+
   # db:
   #   image: postgres
   #   volumes:
