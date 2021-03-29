@@ -17,6 +17,14 @@ services:
   #     - POSTGRES_PASSWORD=postgres
 
 
+  db:
+    image: postgres:13.2-alpine
+
+    environment: 
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecretpostgres
+
 
   app:
 
@@ -31,7 +39,9 @@ services:
       context: .
 
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
 
     # command: >
     #   bash -c "python manage.py migrate
@@ -46,7 +56,12 @@ services:
     # Environment
     environment:
     # Timezone
-      TZ: "America/Montreal"
+      # TZ: "America/Montreal"
+      - TZ=America/Montreal
+      - DB_HOST=db
+      - DB_NAME=app
+      - DB_USER=postgres
+      - DB_PASS=supersecretpostgres
 
     # Shared file
     volumes:
@@ -54,5 +69,5 @@ services:
 
     # image: "python"
 
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
