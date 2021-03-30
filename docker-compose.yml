@@ -6,6 +6,7 @@ services:
   # docker-compose run app sh -c "python manage.py test && flake8"
   # docker-compose run app sh -c "python manage.py startapp core"
   # docker-compose run app sh -c "python manage.py makemigrations core"
+  # docker-compose run --rm app sh -c "python manage.py startapp user"
 
   # db:
   #   image: postgres
@@ -18,6 +19,7 @@ services:
 
 
   db:
+  
     image: postgres:13.2-alpine
 
     environment: 
@@ -25,6 +27,26 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=supersecretpostgres
 
+    volumes:
+      - ./app/postgres.conf:/etc/postgresql/postgresql.conf
+
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    # restart: always
+
+
+  pgadmin:
+    
+    container_name: pgadmin
+    # dpage/pgadmin4:latest
+    image: dpage/pgadmin4:latest
+
+    environment: 
+      - PGADMIN_DEFAULT_EMAIL=test@test.com
+      - PGADMIN_DEFAULT_PASSWORD=SuperSecret
+      - listen_addresses='*'
+
+    ports:
+      - "80:80"
 
   app:
 
