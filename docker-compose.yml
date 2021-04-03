@@ -3,6 +3,7 @@ services:
 
   # git add .
   # git commit -a 
+  # git commit -am "Re-factored tags and ingredients"
   # git push origin
   # docker-compose build
   # docker-compose run app sh -c "django-admin startproject app ."
